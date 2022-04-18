@@ -17,7 +17,7 @@ public class Tap {
 
     @JsonCreator
     public Tap(@JsonProperty("ID") Integer id,
-               @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy HH:mm:ss")
+               @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
                @JsonProperty("DateTimeUTC") Date dateTime,
                @JsonProperty("TapType") TapType tapType,
                @JsonProperty("StopId") Stop stop,

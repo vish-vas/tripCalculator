@@ -13,8 +13,7 @@ public class TripCostCalculatorFactory {
     private final Map<TripStatus, TripCostCalculator> tripCostCalculators;
 
     TripCostCalculatorFactory(List<TripCostCalculator> tripCostCalculators) {
-        this.tripCostCalculators = tripCostCalculators
-                .stream()
+        this.tripCostCalculators = tripCostCalculators.stream()
                 .collect(Collectors.toMap(TripCostCalculator::forTripStatus, Function.identity()));
     }
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,6 +62,8 @@ public class TripCostingService {
 
         //handle the incomplete trips
         panTapOns.values().forEach(tapOn -> resultTrips.add(createTrip(tapOn, null, TripStatus.INCOMPLETE)));
+
+        resultTrips.sort(Comparator.comparing(Trip::getStarted));
         return resultTrips;
     }
 
