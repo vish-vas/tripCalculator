@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: Trip Calculator
+
+trip-calculator-config:
+  inputFileName: "src/main/resources/taps.csv"
+  outputFileName: "result/trips.csv"
