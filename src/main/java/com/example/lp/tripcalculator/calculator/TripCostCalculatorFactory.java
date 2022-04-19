@@ -3,8 +3,8 @@ package com.example.lp.tripcalculator.calculator;
 import com.example.lp.tripcalculator.model.TripStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class TripCostCalculatorFactory {
     private final Map<TripStatus, TripCostCalculator> tripCostCalculators;
 
-    TripCostCalculatorFactory(List<TripCostCalculator> tripCostCalculators) {
+    TripCostCalculatorFactory(Set<TripCostCalculator> tripCostCalculators) {
         this.tripCostCalculators = tripCostCalculators.stream()
                 .collect(Collectors.toMap(TripCostCalculator::forTripStatus, Function.identity()));
     }
