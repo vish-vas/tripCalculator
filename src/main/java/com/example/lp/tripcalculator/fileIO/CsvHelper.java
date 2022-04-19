@@ -30,7 +30,6 @@ public class CsvHelper {
     public <T> void writeToFile(String fileName, Class<T> clazz, List<T> records) throws IOException {
         Path pathToFile = Paths.get(fileName);
         Files.createDirectories(pathToFile.getParent());
-        Files.createFile(pathToFile);
         ObjectWriter writer = csvMapper.writer(csvMapper.schemaFor(clazz).withHeader());
         writer.writeValue(pathToFile.toFile(), records);
     }
