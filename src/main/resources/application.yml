@@ -3,5 +3,5 @@ spring:
     name: Trip Calculator
 
 trip-calculator-config:
-  inputFileName: "src/main/resources/taps.csv"
-  outputFileName: "result/trips.csv"
+  inputFileName: "${taps:src/main/resources/taps.csv}"
+  outputFileName: "${trips:result/trips.csv}"
