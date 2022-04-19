@@ -2,7 +2,7 @@ package com.example.lp.tripcalculator.service;
 
 import com.example.lp.tripcalculator.calculator.TripCostCalculatorFactory;
 import com.example.lp.tripcalculator.config.TripCalculatorConfig;
-import com.example.lp.tripcalculator.fileIO.CsvReader;
+import com.example.lp.tripcalculator.fileIO.CsvHelper;
 import com.example.lp.tripcalculator.model.Tap;
 import com.example.lp.tripcalculator.model.TapType;
 import com.example.lp.tripcalculator.model.Trip;
@@ -23,23 +23,28 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class TripCostingService {
 
-    private final CsvReader csvReader;
+    private final CsvHelper csvHelper;
     private final TripCostCalculatorFactory tripCostCalculatorFactory;
     private final String inputFileName;
+    private final String outputFileName;
     private static final String CURRENCY = "$";
 
-    public TripCostingService(CsvReader csvReader,
+    public TripCostingService(CsvHelper csvHelper,
                               TripCostCalculatorFactory tripCostCalculatorFactory,
                               TripCalculatorConfig config) {
-        this.csvReader = csvReader;
+        this.csvHelper = csvHelper;
         this.tripCostCalculatorFactory = tripCostCalculatorFactory;
         this.inputFileName = config.getInputFileName();
+        this.outputFileName = config.getOutputFileName();
     }
 
+    public void processFile() throws IOException {
+        Iterator<Tap> taps = csvHelper.readFromFile(inputFileName, Tap.class);
+        List<Trip> trips = calculateCosts(taps);
+        csvHelper.writeToFile(outputFileName, Trip.class, trips);
+    }
 
-    public List<Trip> calculateCosts() throws IOException {
-        Iterator<Tap> taps = csvReader.parse(inputFileName, Tap.class);
-
+    public List<Trip> calculateCosts(Iterator<Tap> taps) {
         Map<String, Tap> panTapOns = new HashMap<>();
         List<Trip> resultTrips = new ArrayList<>();
 
@@ -79,7 +84,7 @@ public class TripCostingService {
 
     private Trip createTrip(Tap tapOn, Tap tapOff, TripStatus tripStatus) {
         String tripCost = CURRENCY + tripCostCalculatorFactory.getCalculatorForTripStatus(tripStatus).calculateCost(tapOn, tapOff)
-                .setScale(2, RoundingMode.HALF_EVEN);
+                .setScale(2, RoundingMode.HALF_UP);
         Trip trip = new Trip(tapOn.getDateTime(), tapOn.getStop(), tripCost, tapOn.getCompanyId(), tapOn.getBusId(), tapOn.getPan(), tripStatus);
         if(tapOff != null) {
             trip.setFinished(tapOff.getDateTime());

@@ -23,7 +23,7 @@ public class Application implements CommandLineRunner {
 	}
 
 	public void run(String... args) throws IOException {
-		this.tripCostingService.calculateCosts();
+		this.tripCostingService.processFile();
 		System.exit(0);
 	}
 
